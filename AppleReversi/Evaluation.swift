@@ -9,15 +9,15 @@
 import Foundation
 
 /// 評価関数の型
-typealias EvaluationFunction = (board: Board, color: CellState) -> Int
+typealias EvaluationFunction = (_ board: Board, _ color: CellState) -> Int
 
 /// 盤上の色の数のみを評価値とする評価関数
-func countColor(board: Board, color: CellState) -> Int {
+func countColor(_ board: Board, color: CellState) -> Int {
     return board.countCells(color)
 }
 
 /// 盤上の位置に付けられた評価値の合計を評価値とする評価関数
-func getWeightedScore(board: Board, color: CellState) -> Int {
+func getWeightedScore(_ board: Board, color: CellState) -> Int {
     let opponent = color.opponent
     
     var total = 0

@@ -11,8 +11,8 @@ import Foundation
 
 /// 一直線上の方向
 enum Line: Int {
-    case Backward = -1, Hold, Forward
-    static let allValues: [Line] = [.Backward, .Hold, .Forward]
+    case backward = -1, hold, forward
+    static let allValues: [Line] = [.backward, .hold, .forward]
 }
 
 /// 盤面上での石を返す方向
@@ -35,7 +35,7 @@ class Move {
     }
     
     /// この手の座標から見て、引数で渡されたDirectionの方向で裏返すことができる石の数を返す
-    func countFlippableDisks(direction: Direction, cells: Array2D<CellState>) -> Int {
+    func countFlippableDisks(_ direction: Direction, cells: Array2D<CellState>) -> Int {
         
         // 垂直方向の進行方向を表わす係数
         let y = direction.vertical.rawValue
@@ -62,16 +62,16 @@ class Move {
     }
     
     /// 指定された場所に石を置ける場合、trueを返す
-    func canPlace(cells: Array2D<CellState>) -> Bool {
+    func canPlace(_ cells: Array2D<CellState>) -> Bool {
         if let state = cells[self.row, self.column] {
-            if state != .Empty { // すでに石が置かれている
+            if state != .empty { // すでに石が置かれている
                 return false
             }
         }
         
         for vertical in Line.allValues {
             for horizontal in Line.allValues {
-                if vertical == .Hold && horizontal == .Hold {
+                if vertical == .hold && horizontal == .hold {
                     continue
                 }
                 if 0 < self.countFlippableDisks((vertical, horizontal), cells: cells) {

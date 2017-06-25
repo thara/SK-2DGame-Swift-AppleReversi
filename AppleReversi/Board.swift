@@ -18,11 +18,11 @@ class Board : CustomStringConvertible {
     var cells: Array2D<CellState>
     
     init() {
-        self.cells = Array2D<CellState>(rows: BoardSize, columns: BoardSize, repeatedValue: .Empty)
-        self.cells[3, 4] = .Black
-        self.cells[4, 3] = .Black
-        self.cells[3, 3] = .White
-        self.cells[4, 4] = .White
+        self.cells = Array2D<CellState>(rows: BoardSize, columns: BoardSize, repeatedValue: .empty)
+        self.cells[3, 4] = .black
+        self.cells[4, 3] = .black
+        self.cells[3, 3] = .white
+        self.cells[4, 4] = .white
     }
     
     init(cells: Array2D<CellState>) {
@@ -34,10 +34,10 @@ class Board : CustomStringConvertible {
     }
     
     /// 手を打つ
-    func makeMove(move: Move) {
+    func makeMove(_ move: Move) {
         for vertical in Line.allValues {
             for horizontal in Line.allValues {
-                if vertical == .Hold && horizontal == .Hold {
+                if vertical == .hold && horizontal == .hold {
                     continue
                 }
                 let direction = (vertical, horizontal)
@@ -59,7 +59,7 @@ class Board : CustomStringConvertible {
     }
     
     /// 指定された状態のセルの数を返す
-    func countCells(state: CellState) -> Int {
+    func countCells(_ state: CellState) -> Int {
         var count = 0
         for row in 0..<self.cells.rows {
             for column in 0..<self.cells.columns {
@@ -73,11 +73,11 @@ class Board : CustomStringConvertible {
     
     /// ゲームが終了した場合、trueを返す
     func hasGameFinished() -> Bool {
-        return self.existsValidMove(.Black) == false && self.existsValidMove(.White) == false
+        return self.existsValidMove(.black) == false && self.existsValidMove(.white) == false
     }
     
     /// 合法な手が存在する場合、trueを返す
-    func existsValidMove(color: CellState) -> Bool {
+    func existsValidMove(_ color: CellState) -> Bool {
         for row in 0..<BoardSize {
             for column in 0..<BoardSize {
                 let move = Move(color: color, row: row, column: column)
@@ -90,7 +90,7 @@ class Board : CustomStringConvertible {
     }
     
     /// 指定された色の合法な手の一覧を返す
-    func getValidMoves(color: CellState) -> [Move] {
+    func getValidMoves(_ color: CellState) -> [Move] {
         var moves = Array<Move>()
         
         for row in 0..<BoardSize {
@@ -114,9 +114,9 @@ class Board : CustomStringConvertible {
                     cells.append(String(state.rawValue))
                 }
             }
-            let line = cells.joinWithSeparator(" ")
+            let line = cells.joined(separator: " ")
             rows.append(line)
         }
-        return Array(rows.reverse()).joinWithSeparator("\n")
+        return Array(rows.reversed()).joined(separator: "\n")
     }
 }

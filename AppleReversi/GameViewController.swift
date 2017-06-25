@@ -11,7 +11,7 @@ import SpriteKit
 
 class GameViewController: UIViewController {
 
-    private var scene: GameScene!
+    fileprivate var scene: GameScene!
     
     var cpu: ComputerPlayer!
     
@@ -20,16 +20,16 @@ class GameViewController: UIViewController {
         
         // Viewの設定
         let skView = self.view as! SKView
-        skView.multipleTouchEnabled = false
+        skView.isMultipleTouchEnabled = false
         self.scene = GameScene()
         self.scene.size = CGSize(width: 375, height: 667)
-        self.scene.scaleMode = .AspectFit
+        self.scene.scaleMode = .aspectFit
         skView.presentScene(self.scene)
         
         let evaluate = countColor
         let maxDepth = 2
         let search = MiniMaxMethod(evaluate: evaluate, maxDepth: maxDepth)
-        self.cpu = ComputerPlayer(color: .White, search: search)
+        self.cpu = ComputerPlayer(color: .white, search: search)
         
         self.scene.switchTurnHandler = self.switchTurn
         self.scene.initBoard()
@@ -37,8 +37,8 @@ class GameViewController: UIViewController {
     
     func switchTurn() {
         if self.scene.nextColor == self.cpu.color {
-            self.scene.userInteractionEnabled = false
-            NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: #selector(makeMoveByComputer), userInfo: nil, repeats: false)
+            self.scene.isUserInteractionEnabled = false
+            Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(makeMoveByComputer), userInfo: nil, repeats: false)
         }
     }
     
@@ -51,22 +51,22 @@ class GameViewController: UIViewController {
         if self.scene.board.hasGameFinished() == false && self.scene.board.existsValidMove(self.cpu.color.opponent) == false {
             self.makeMoveByComputer()
         }
-        self.scene.userInteractionEnabled = true
+        self.scene.isUserInteractionEnabled = true
     }
     
-    override func shouldAutorotate() -> Bool {
+    override var shouldAutorotate : Bool {
         return true
     }
     
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.Portrait
+    override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.portrait
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
 }

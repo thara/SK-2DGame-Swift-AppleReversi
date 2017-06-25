@@ -14,12 +14,12 @@ struct Array2D<T> {
     let rows: Int
     let columns: Int
     
-    private var array: [T?]
+    fileprivate var array: [T?]
     
     init(rows: Int, columns: Int, repeatedValue: T? = nil) {
         self.rows = rows
         self.columns = columns
-        self.array = Array<T?>(count: rows * columns, repeatedValue: repeatedValue)
+        self.array = Array<T?>(repeating: repeatedValue, count: rows * columns)
     }
     
     subscript(row: Int, column: Int) -> T? {

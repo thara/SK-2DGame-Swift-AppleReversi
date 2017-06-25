@@ -17,8 +17,8 @@ let CentralDeltaY: CGFloat = 10.0
 
 /// 石のイメージファイルの名前
 let DiskImageNames = [
-    CellState.Black : "black",
-    CellState.White : "white",
+    CellState.black : "black",
+    CellState.white : "white",
 ]
 
 
@@ -38,7 +38,7 @@ class GameScene: SKScene {
     
     var switchTurnHandler: (() -> ())?
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         // 基準点を中心に設定
         super.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
@@ -61,9 +61,9 @@ class GameScene: SKScene {
         self.gameLayer.addChild(self.disksLayer)
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
-        let location = touch.locationInNode(self.disksLayer)
+        let location = touch.location(in: self.disksLayer)
         
         if let (row, column) = self.convertPointOnBoard(location) {
             // タップされた場所に現在のターンの石を配置する手
@@ -82,11 +82,11 @@ class GameScene: SKScene {
     func initBoard() {
         self.board = Board()
         self.updateDiskNodes()
-        self.nextColor = .Black
+        self.nextColor = .black
     }
     
     /// 手を打つ
-    func makeMove(move: Move?) {
+    func makeMove(_ move: Move?) {
         if move != nil {
             // 盤上に手を打つ
             self.board.makeMove(move!)
@@ -147,7 +147,7 @@ class GameScene: SKScene {
     }
     
     /// 盤上での座標をレイヤー上での座標に変換する
-    func convertPointOnLayer(row: Int, column: Int) -> CGPoint {
+    func convertPointOnLayer(_ row: Int, column: Int) -> CGPoint {
         return CGPoint(
             x: CGFloat(column) * SquareWidth + SquareWidth / 2,
             y: CGFloat(row) * SquareHeight + SquareHeight / 2
@@ -155,7 +155,7 @@ class GameScene: SKScene {
     }
     
     /// レイヤー上での座標を盤上での座標に変換する
-    func convertPointOnBoard(point: CGPoint) -> (row: Int, column: Int)? {
+    func convertPointOnBoard(_ point: CGPoint) -> (row: Int, column: Int)? {
         if 0 <= point.x && point.x < SquareWidth * CGFloat(BoardSize) &&
             0 <= point.y && point.y < SquareHeight * CGFloat(BoardSize) {
             return (Int(point.y / SquareHeight), Int(point.x / SquareWidth))
@@ -166,14 +166,14 @@ class GameScene: SKScene {
     
     /// スコアを更新する
     func updateScores() {
-        self.blackScoreLabel.text = String(self.board.countCells(.Black))
-        self.whiteScoreLabel.text = String(self.board.countCells(.White))
+        self.blackScoreLabel.text = String(self.board.countCells(.black))
+        self.whiteScoreLabel.text = String(self.board.countCells(.white))
     }
     
     /// リザルト画面を表示する
     func showGameResult() {
-        let black = self.board.countCells(.Black)
-        let white = self.board.countCells(.White)
+        let black = self.board.countCells(.black)
+        let white = self.board.countCells(.white)
         // 勝敗に対応した画像を読み込んだノード
         var resultImage: SKSpriteNode
         if white < black {
@@ -189,7 +189,7 @@ class GameScene: SKScene {
         resultImage.size = CGSize(width: self.size.width, height: imageHeight)
         
         let gameResultLayer = GameResultLayer()
-        gameResultLayer.userInteractionEnabled = true
+        gameResultLayer.isUserInteractionEnabled = true
         gameResultLayer.touchHandler = self.hideGameResult
         gameResultLayer.addChild(resultImage)
         
@@ -207,12 +207,12 @@ class GameScene: SKScene {
 
 extension SKLabelNode {
     /// スコア表示用のSKLabelNodeを生成する
-    class func createScoreLabel(x x: Int, y: Int) -> SKLabelNode {
+    class func createScoreLabel(x: Int, y: Int) -> SKLabelNode {
         let node = SKLabelNode(fontNamed: "Zapfino")
         node.position = CGPoint(x: x, y: y)
         node.fontSize = 25
-        node.horizontalAlignmentMode = .Right
-        node.fontColor = UIColor.whiteColor()
+        node.horizontalAlignmentMode = .right
+        node.fontColor = UIColor.white
         return node
     }
 }
@@ -222,7 +222,7 @@ class GameResultLayer: SKNode {
     
     var touchHandler: (() -> ())?
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchHandler?()
     }
 }

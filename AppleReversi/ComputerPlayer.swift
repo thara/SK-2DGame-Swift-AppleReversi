@@ -20,7 +20,7 @@ class ComputerPlayer {
     }
     
     /// 手を選択する
-    func selectMove(board: Board) -> Move? {
+    func selectMove(_ board: Board) -> Move? {
         
         var bestMove: Move?
         var bestScore = MinScore

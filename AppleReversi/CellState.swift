@@ -10,15 +10,15 @@ import Foundation
 
 /// 盤上の一セルの状態
 public enum CellState: Int {
-    case Empty = 0, Black, White
+    case empty = 0, black, white
     
     /// 相手側の色
     var opponent: CellState {
         switch self {
-        case .Black:
-            return .White
-        case .White:
-            return .Black
+        case .black:
+            return .white
+        case .white:
+            return .black
         default:
             return self
         }

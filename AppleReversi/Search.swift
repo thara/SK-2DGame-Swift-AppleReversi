@@ -15,7 +15,7 @@ let MaxScore = Int(UInt8.max)
 
 /// ゲーム木を探索して最良のスコアを求めるプロトコル
 protocol Search {
-    func getBestScore(board: Board, color: CellState) -> Int
+    func getBestScore(_ board: Board, color: CellState) -> Int
 }
 
 
@@ -28,7 +28,7 @@ class SearchAlgorithmBase {
     // 探索する深さ
     let maxDepth: Int
     
-    init(evaluate: EvaluationFunction, maxDepth: Int) {
+    init(evaluate: @escaping EvaluationFunction, maxDepth: Int) {
         self.evaluate = evaluate
         self.maxDepth = maxDepth
     }
@@ -38,14 +38,14 @@ class SearchAlgorithmBase {
 /// MiniMax法による探索アルゴリズムの実装
 class MiniMaxMethod : SearchAlgorithmBase, Search {
     
-    func getBestScore(board: Board, color: CellState) -> Int {
+    func getBestScore(_ board: Board, color: CellState) -> Int {
         return self.miniMax(board, color: color, depth: 1)
     }
     
-    func miniMax(node: Board, color: CellState, depth: Int) -> Int {
+    func miniMax(_ node: Board, color: CellState, depth: Int) -> Int {
         if self.maxDepth <= depth {
             // 設定されている最大の深さに達したときに、評価値を算出
-            return self.evaluate(board: node, color: color)
+            return self.evaluate(node, color)
         }
         
         let moves = node.getValidMoves(color)
@@ -84,17 +84,17 @@ class MiniMaxMethod : SearchAlgorithmBase, Search {
 /// Alpha-Beta法による探索アルゴリズムの実装
 class AlphaBetaPruning : SearchAlgorithmBase, Search {
     
-    func getBestScore(board: Board, color: CellState) -> Int {
+    func getBestScore(_ board: Board, color: CellState) -> Int {
         var minScore = MinScore
         var maxScore = MaxScore
         return self.alphaBeta(board, color: color, depth: 1, α: &minScore, β: &maxScore)
     }
     
-    func alphaBeta(node: Board, color: CellState, depth: Int, inout α: Int, inout β: Int) -> Int {
+    func alphaBeta(_ node: Board, color: CellState, depth: Int, α: inout Int, β: inout Int) -> Int {
         
         if self.maxDepth <= depth {
             // 設定されている最大の深さに達したときに、評価値を算出
-            return self.evaluate(board: node, color: color)
+            return self.evaluate(node, color)
         }
         
         let moves = node.getValidMoves(color)
