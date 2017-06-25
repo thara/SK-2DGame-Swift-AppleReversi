@@ -8,6 +8,10 @@
 
 2017/06現在最新のSwift３（Xcode 8.3.3）に対応しています。
 
+## Change Log
+
+- [Swift 3(Xcode 8.3.3) 差分](https://github.com/thara/SK-2DGame-Swift-AppleReversi/commit/0c9e0402bbaaeb0c59b96862df0c5af2383b662d)
+
 
 ## Disclaimer
 
