@@ -23,6 +23,7 @@
 		7B8B78C41F50995100C6EBF9 /* Images.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 7B8B78C21F50995100C6EBF9 /* Images.atlas */; };
 		7B8B78C51F50995100C6EBF9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B8B78C31F50995100C6EBF9 /* Images.xcassets */; };
 		7B8B78C71F5099A400C6EBF9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B8B78C61F5099A400C6EBF9 /* Assets.xcassets */; };
+		7B8B78CA1F509ACA00C6EBF9 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B8B78C91F509ACA00C6EBF9 /* GameplayKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		7B8B78C21F50995100C6EBF9 /* Images.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Images.atlas; sourceTree = "<group>"; };
 		7B8B78C31F50995100C6EBF9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7B8B78C61F5099A400C6EBF9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7B8B78C91F509ACA00C6EBF9 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B8B78CA1F509ACA00C6EBF9 /* GameplayKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,6 +65,7 @@
 			children = (
 				7B80AE101CF3400600C13525 /* AppleReversi */,
 				7B80AE0F1CF3400600C13525 /* Products */,
+				7B8B78C81F509ACA00C6EBF9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -111,6 +115,14 @@
 				7B80AE351CF346B000C13525 /* ComputerPlayer.swift */,
 			);
 			name = AI;
+			sourceTree = "<group>";
+		};
+		7B8B78C81F509ACA00C6EBF9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7B8B78C91F509ACA00C6EBF9 /* GameplayKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
