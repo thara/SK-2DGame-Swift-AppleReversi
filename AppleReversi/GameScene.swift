@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import GameplayKit
 
 /// マス目のサイズ
 let SquareHeight: CGFloat = 45.0
@@ -34,9 +35,13 @@ class GameScene: SKScene {
     let blackScoreLabel = SKLabelNode.createScoreLabel(x: 150, y: -260)
     let whiteScoreLabel = SKLabelNode.createScoreLabel(x: 150, y: -310)
     
+    let cpu : CellState = .white
+    
     var gameResultLayer: SKNode?
     
     var switchTurnHandler: (() -> ())?
+    
+    var strategist: GKMinmaxStrategist?
     
     override func didMove(to view: SKView) {
         // 基準点を中心に設定
@@ -59,6 +64,12 @@ class GameScene: SKScene {
         
         self.disksLayer.position = layerPosition
         self.gameLayer.addChild(self.disksLayer)
+        
+        self.strategist = GKMinmaxStrategist()
+        self.strategist?.maxLookAheadDepth = 3
+        self.strategist?.randomSource = GKARC4RandomSource()
+        
+        self.initBoard()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -72,6 +83,7 @@ class GameScene: SKScene {
             if move.canPlace(self.board.cells) {
                 self.makeMove(move)
                 if self.board.hasGameFinished() == false {
+                    self.board.currentPlayer = self.board.currentPlayer?.opponent
                     self.switchTurnHandler?()
                 }
             }
@@ -80,9 +92,18 @@ class GameScene: SKScene {
     
     /// 盤の初期化
     func initBoard() {
-        self.board = Board()
+        var cells = Array2D<CellState>(rows: BoardSize, columns: BoardSize, repeatedValue: .empty)
+        cells[3, 4] = .black
+        cells[4, 3] = .black
+        cells[3, 3] = .white
+        cells[4, 4] = .white
+        
+        self.board = Board(cells: cells)
         self.updateDiskNodes()
         self.nextColor = .black
+        
+        self.strategist?.gameModel = self.board
+        self.board.currentPlayer = Player.blackPlayer
     }
     
     /// 手を打つ

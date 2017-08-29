@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import GameplayKit
 
 /// 一直線上の方向
 enum Line: Int {
@@ -20,13 +20,16 @@ typealias Direction = (vertical: Line, horizontal: Line)
 
 
 /// 盤上の位置にどちらの石を置くかを表わす「手」
-class Move {
+class Move : NSObject, GKGameModelUpdate {
     // この手で配置する石の色
     let color: CellState
     // 配置する座標の行番号
     let row: Int
     // 配置する座標の列番号
     let column: Int
+    
+    // implemented GKGameModelUpdate
+    var value: Int = 0
     
     init(color: CellState, row: Int, column: Int) {
         self.color = color

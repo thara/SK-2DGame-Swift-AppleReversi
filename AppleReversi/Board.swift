@@ -7,22 +7,25 @@
 //
 
 import Foundation
+import GameplayKit
 
 /// 盤の一辺のセルの数
 let BoardSize = 8
 
 /// 8 * 8 の盤面
-class Board : CustomStringConvertible {
+class Board : NSObject {
     
     /// 盤上のすべてのセルの状態を保持する二次元配列
     var cells: Array2D<CellState>
     
-    init() {
+    var currentPlayer : Player?
+    
+    override init() {
         self.cells = Array2D<CellState>(rows: BoardSize, columns: BoardSize, repeatedValue: .empty)
-        self.cells[3, 4] = .black
-        self.cells[4, 3] = .black
-        self.cells[3, 3] = .white
-        self.cells[4, 4] = .white
+//        self.cells[3, 4] = .black
+//        self.cells[4, 3] = .black
+//        self.cells[3, 3] = .white
+//        self.cells[4, 4] = .white
     }
     
     init(cells: Array2D<CellState>) {
@@ -105,7 +108,7 @@ class Board : CustomStringConvertible {
         return moves
     }
     
-    var description: String {
+    override var description: String {
         var rows = Array<String>()
         for row in 0..<BoardSize {
             var cells = Array<String>()
@@ -120,3 +123,49 @@ class Board : CustomStringConvertible {
         return Array(rows.reversed()).joined(separator: "\n")
     }
 }
+
+extension Board : GKGameModel {
+    
+    var players: [GKGameModelPlayer]? { return Player.allPlayers }
+    var activePlayer : GKGameModelPlayer? { return currentPlayer }
+    
+    func gameModelUpdates(for player: GKGameModelPlayer) -> [GKGameModelUpdate]? {
+        let p = player as! Player
+        let moves = getValidMoves(p.color)
+        if moves.count == 0 {
+            return nil
+        }
+        return moves
+    }
+    
+    func apply(_ gameModelUpdate: GKGameModelUpdate) {
+        let m = gameModelUpdate as! Move
+        makeMove(m)
+        currentPlayer = currentPlayer?.opponent
+    }
+    
+    func score(for player: GKGameModelPlayer) -> Int {
+        let p = player as! Player
+        return countCells(p.color)
+    }
+    
+    func setGameModel(_ gameModel: GKGameModel) {
+        let b = gameModel as! Board
+        self.cells = b.cells
+        self.currentPlayer = b.currentPlayer
+    }
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = Board()
+        copy.setGameModel(self)
+        return copy
+    }
+}
+
+
+
+
+
+
+
+

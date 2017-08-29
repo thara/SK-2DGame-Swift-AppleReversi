@@ -13,7 +13,7 @@ class GameViewController: UIViewController {
 
     fileprivate var scene: GameScene!
     
-    var cpu: ComputerPlayer!
+//    var cpu: ComputerPlayer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,17 +26,11 @@ class GameViewController: UIViewController {
         self.scene.scaleMode = .aspectFit
         skView.presentScene(self.scene)
         
-        let evaluate = countColor
-        let maxDepth = 2
-        let search = MiniMaxMethod(evaluate: evaluate, maxDepth: maxDepth)
-        self.cpu = ComputerPlayer(color: .white, search: search)
-        
         self.scene.switchTurnHandler = self.switchTurn
-        self.scene.initBoard()
     }
     
     func switchTurn() {
-        if self.scene.nextColor == self.cpu.color {
+        if self.scene.nextColor == self.scene.cpu {
             self.scene.isUserInteractionEnabled = false
             Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(makeMoveByComputer), userInfo: nil, repeats: false)
         }
@@ -44,13 +38,15 @@ class GameViewController: UIViewController {
     
     /// コンピュータプレイヤーに一手打たせる
     func makeMoveByComputer() {
-        let nextMove = self.cpu.selectMove(self.scene.board!)
-        self.scene.makeMove(nextMove)
+        let next = self.scene.strategist?.bestMove(for: self.scene.board.currentPlayer!)
+        //let nextMove = self.cpu.selectMove(self.scene.board!)
+        self.scene.makeMove(next as? Move)
         
         // プレイヤーが合法な手を打てない場合は、プレイヤーのターンをスキップする
-        if self.scene.board.hasGameFinished() == false && self.scene.board.existsValidMove(self.cpu.color.opponent) == false {
+        if self.scene.board.hasGameFinished() == false && self.scene.board.existsValidMove(self.scene.cpu.opponent) == false {
             self.makeMoveByComputer()
         }
+        self.scene.board.currentPlayer = self.scene.board.currentPlayer?.opponent
         self.scene.isUserInteractionEnabled = true
     }
     
