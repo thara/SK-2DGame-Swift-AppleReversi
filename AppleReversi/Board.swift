@@ -16,57 +16,62 @@ let BoardSize = 8
 class Board : NSObject {
     
     /// 盤上のすべてのセルの状態を保持する二次元配列
-    var cells: Array2D<CellState>
+    fileprivate var cells: Array2D<CellState>?
     
     var currentPlayer : Player?
     
     override init() {
-        self.cells = Array2D<CellState>(rows: BoardSize, columns: BoardSize, repeatedValue: .empty)
-//        self.cells[3, 4] = .black
-//        self.cells[4, 3] = .black
-//        self.cells[3, 3] = .white
-//        self.cells[4, 4] = .white
     }
     
     init(cells: Array2D<CellState>) {
         self.cells = cells
     }
     
-    func clone() -> Board {
-        return Board(cells: self.cells)
+    func canPlace(_ move: Move) -> Bool {
+        return move.canPlace(self.cells!)
+    }
+    
+    subscript(row: Int, column: Int) -> CellState? {
+        get {
+            return self.cells?[row, column]
+        }
     }
     
     /// 手を打つ
     func makeMove(_ move: Move) {
+        assert(self.cells != nil)
+        
         for vertical in Line.allValues {
             for horizontal in Line.allValues {
                 if vertical == .hold && horizontal == .hold {
                     continue
                 }
                 let direction = (vertical, horizontal)
-                let count = move.countFlippableDisks(direction, cells: self.cells)
+                let count = move.countFlippableDisks(direction, cells: self.cells!)
                 
                 if 0 < count {
                     // 石を返す
                     let y = vertical.rawValue
                     let x = horizontal.rawValue
                     for i in 1...count {
-                        self.cells[move.row + i * y, move.column + i * x] = move.color
+                        self.cells![move.row + i * y, move.column + i * x] = move.color
                     }
                 }
             }
         }
         
         // 石を置く
-        self.cells[move.row, move.column] = move.color
+        self.cells![move.row, move.column] = move.color
     }
     
     /// 指定された状態のセルの数を返す
     func countCells(_ state: CellState) -> Int {
+        assert(self.cells != nil)
+        
         var count = 0
-        for row in 0..<self.cells.rows {
-            for column in 0..<self.cells.columns {
-                if self.cells[row, column] == state {
+        for row in 0..<self.cells!.rows {
+            for column in 0..<self.cells!.columns {
+                if self.cells![row, column] == state {
                     count += 1
                 }
             }
@@ -84,7 +89,7 @@ class Board : NSObject {
         for row in 0..<BoardSize {
             for column in 0..<BoardSize {
                 let move = Move(color: color, row: row, column: column)
-                if move.canPlace(self.cells) {
+                if move.canPlace(self.cells!) {
                     return true
                 }
             }
@@ -99,7 +104,7 @@ class Board : NSObject {
         for row in 0..<BoardSize {
             for column in 0..<BoardSize {
                 let move = Move(color:color, row: row, column: column)
-                if move.canPlace(self.cells) {
+                if move.canPlace(self.cells!) {
                     moves.append(move)
                 }
             }
@@ -113,7 +118,7 @@ class Board : NSObject {
         for row in 0..<BoardSize {
             var cells = Array<String>()
             for column in 0..<BoardSize {
-                if let state = self.cells[row, column] {
+                if let state = self.cells?[row, column] {
                     cells.append(String(state.rawValue))
                 }
             }

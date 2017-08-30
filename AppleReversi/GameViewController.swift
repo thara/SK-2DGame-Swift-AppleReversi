@@ -11,9 +11,7 @@ import SpriteKit
 
 class GameViewController: UIViewController {
 
-    fileprivate var scene: GameScene!
-    
-//    var cpu: ComputerPlayer!
+    var scene: GameScene!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,27 +24,16 @@ class GameViewController: UIViewController {
         self.scene.scaleMode = .aspectFit
         skView.presentScene(self.scene)
         
-        self.scene.switchTurnHandler = self.switchTurn
+        self.scene.switchCPUTurnHandler = self.switchCPUTurn
     }
     
-    func switchTurn() {
-        if self.scene.nextColor == self.scene.cpu {
-            self.scene.isUserInteractionEnabled = false
-            Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(makeMoveByComputer), userInfo: nil, repeats: false)
-        }
+    func switchCPUTurn() {
+        self.scene.isUserInteractionEnabled = false
+        Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(makeMoveByCPU), userInfo: nil, repeats: false)
     }
     
-    /// コンピュータプレイヤーに一手打たせる
-    func makeMoveByComputer() {
-        let next = self.scene.strategist?.bestMove(for: self.scene.board.currentPlayer!)
-        //let nextMove = self.cpu.selectMove(self.scene.board!)
-        self.scene.makeMove(next as? Move)
-        
-        // プレイヤーが合法な手を打てない場合は、プレイヤーのターンをスキップする
-        if self.scene.board.hasGameFinished() == false && self.scene.board.existsValidMove(self.scene.cpu.opponent) == false {
-            self.makeMoveByComputer()
-        }
-        self.scene.board.currentPlayer = self.scene.board.currentPlayer?.opponent
+    func makeMoveByCPU() {
+        self.scene.makeMoveByCPU()
         self.scene.isUserInteractionEnabled = true
     }
     

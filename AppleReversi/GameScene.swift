@@ -35,11 +35,11 @@ class GameScene: SKScene {
     let blackScoreLabel = SKLabelNode.createScoreLabel(x: 150, y: -260)
     let whiteScoreLabel = SKLabelNode.createScoreLabel(x: 150, y: -310)
     
-    let cpu : CellState = .white
+    let cpu : Player = Player.whitePlayer
     
     var gameResultLayer: SKNode?
     
-    var switchTurnHandler: (() -> ())?
+    var switchCPUTurnHandler: (() -> ())?
     
     var strategist: GKMinmaxStrategist?
     
@@ -80,11 +80,13 @@ class GameScene: SKScene {
             // タップされた場所に現在のターンの石を配置する手
             let move = Move(color: self.nextColor, row: row, column: column)
             
-            if move.canPlace(self.board.cells) {
+            if self.board.canPlace(move) {
                 self.makeMove(move)
                 if self.board.hasGameFinished() == false {
                     self.board.currentPlayer = self.board.currentPlayer?.opponent
-                    self.switchTurnHandler?()
+                    if self.board.currentPlayer == self.cpu {
+                        self.switchCPUTurnHandler?()
+                    }
                 }
             }
         }
@@ -125,7 +127,7 @@ class GameScene: SKScene {
     func updateDiskNodes() {
         for row in 0..<BoardSize {
             for column in 0..<BoardSize {
-                if let state = self.board.cells[row, column] {
+                if let state = self.board[row, column] {
                     
                     if let imageName = DiskImageNames[state] {
                         if let prevNode = self.diskNodes[row, column] {
@@ -183,6 +185,21 @@ class GameScene: SKScene {
         } else {
             return nil
         }
+    }
+    
+    func makeMoveByCPU() {
+        guard let cpu = self.board.currentPlayer, cpu == self.cpu else {
+            abort()
+        }
+        
+        let next = self.strategist?.bestMove(for: cpu)
+        self.makeMove(next as? Move)
+        
+        // プレイヤーが合法な手を打てない場合は、プレイヤーのターンをスキップする
+        if self.board.hasGameFinished() == false && self.board.existsValidMove(cpu.opponent.color) == false {
+            self.makeMoveByCPU()
+        }
+        self.board.currentPlayer = cpu.opponent
     }
     
     /// スコアを更新する
