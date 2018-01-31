@@ -43,7 +43,7 @@ class GameViewController: UIViewController {
     }
     
     /// コンピュータプレイヤーに一手打たせる
-    func makeMoveByComputer() {
+    @objc func makeMoveByComputer() {
         let nextMove = self.cpu.selectMove(self.scene.board!)
         self.scene.makeMove(nextMove)
         
