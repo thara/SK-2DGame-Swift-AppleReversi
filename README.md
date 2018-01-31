@@ -6,11 +6,12 @@
 
 [SpriteKitではじめる2Dゲームプログラミング Swift対応](http://www.shoeisha.co.jp/book/detail/9784798139517) の 「第8章 リバーシを作ろう」で作成する 「Apple Reversi」 のソースコードです。
 
-2017/06現在最新のSwift３（Xcode 8.3.3）に対応しています。
+2018/02現在最新のSwift4 (Xcode 9.2) に対応しています。
 
 ## Change Log
 
 - [Swift 3(Xcode 8.3.3) 差分](https://github.com/thara/SK-2DGame-Swift-AppleReversi/commit/0c9e0402bbaaeb0c59b96862df0c5af2383b662d)
+- [Swift 4(Xcode 9.2) 差分](https://github.com/thara/SK-2DGame-Swift-AppleReversi/commit/1be9730626b00abf64cb0bbcce6b8d22127fa3e7)
 
 
 ## Disclaimer
