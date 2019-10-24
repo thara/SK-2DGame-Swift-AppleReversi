@@ -6,7 +6,7 @@
 
 [SpriteKitではじめる2Dゲームプログラミング Swift対応](http://www.shoeisha.co.jp/book/detail/9784798139517) の 「第8章 リバーシを作ろう」で作成する 「Apple Reversi」 のソースコードです。
 
-2018/02現在最新のSwift4 (Xcode 9.2) に対応しています。
+2019/10現在最新のSwift5.1 (Xcode 11) に対応しています。
 
 ## Change Log
 
@@ -25,7 +25,6 @@
 
 - Github:  [Tomochika Hara](https://github.com/thara)
 - Twitter: [@zetta1985](https://twitter.com/zetta1985)
-- Blog: [Tomochika Hara's Blog](https://blog.thara.jp)
 
 当該書籍では「第2章　Swiftの基本」、「第8章　リバーシを作ろう――AIの作り方」を担当しました。
 これらの章や本全体のことでご質問がある場合は、翔泳社様からお問い合わせ頂くか、上記Twitterアカウントにご連絡ください。
